@@ -3,6 +3,7 @@ services:
   app:
     container_name: flask_github_app
     build: .
+    image: "GithubAppsOnAzure.azurecr.io/flask_github_app"
     volumes:
       - ./app:/src/app
     ports:
