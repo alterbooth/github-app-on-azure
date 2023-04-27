@@ -1,0 +1,10 @@
+version: '3'
+services:
+  app:
+    container_name: flask_github_app
+    build: .
+    volumes:
+      - ./app:/src/app
+    ports:
+      - '5000:5000'
+    command: flask run --host=0.0.0.0
