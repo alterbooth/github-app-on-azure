@@ -52,7 +52,7 @@ def bot():
 
             repo = github.get_repo(repo_full_name)
             pull_request = repo.get_pull(pull_request_number)
-            pull_request.create_comment('Hello, @{}!'.format(user))
+            pull_request.create_issue_comment('LGFM, @{}!'.format(user))
         
     return "ok"
 
