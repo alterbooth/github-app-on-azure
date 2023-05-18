@@ -1,19 +1,27 @@
 import logging
 import os
+import base64
 import azure.functions as func
 from github import Github, GithubIntegration
+import openai
+import urllib.parse
+import requests
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
     logging.info('Python HTTP trigger function processed a request.')
-    app_id = '321478'
-    # Read the bot certificate
-    # with open("github-app-http-trigger/private-key.pem") as cert_file:
-    #     app_key = cert_file.read()
-    #     logging.info(app_key)
     try:
+        #GithubAppsの環境変数読み込み
+        app_id = os.environ.get("APP_ID")
         private_key = os.environ.get("PrivateKey")
+        #OpenAIの設定
+        openai.api_type = "azure"
+        openai.api_base = os.environ.get("OPEN_AI_URL")
+        openai.api_version = "2023-03-15-preview"
+        openai.api_key = os.environ.get("OPEN_AI_KEY")
+
         logging.info(private_key)
-        private_key = private_key.replace("\\n", "\n")
+        private_key = base64.b64decode(private_key).decode()
+        logging.info(private_key)
     except Exception as e:
         logging.error(e)
         print(e)
@@ -53,6 +61,21 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
 
             repo = github.get_repo(repo_full_name)
             pull_request = repo.get_pull(pull_request_number)
-            pull_request.create_comment('Hello, @{}!'.format(user))
+            text = requests.get(payload["pull_request"]["diff_url"])
+            response = openai.ChatCompletion.create(
+                engine="github-app-test",
+                messages=[{"role": "system", "content": "You are an AI assistant that helps people find information."}, {"role": "user", "content": f"今から示すのはgithubにおける差分のファイルです。あなたをこれを見てどの部分に変更が加わったかを端的に説明してください。また誤りやタイピングのミス等を発見した場合はそれも報告してください。また、質問への返答はですます調で答えてください。      \n  \n  \n{text.text}"}, ],
+                temperature=0.7,
+                max_tokens=800,
+                top_p=0.95,
+                frequency_penalty=0,
+                presence_penalty=0,
+                stop=None
+            )
+
+            decoded_text = urllib.parse.unquote(response["choices"][0]["message"]["content"])
+            pull_request.create_issue_comment(
+                decoded_text
+            )
 
     return func.HttpResponse("OK", status_code=200)
