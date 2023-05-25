@@ -25,7 +25,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     except Exception as e:
         logging.error(e)
         print(e)
-        return func.HttpResponse(500, "private key is invalid")
+        return func.HttpResponse("private key is invalid", status_code=400)
 
     # Create an GitHub integration instance
     integration = GithubIntegration(
@@ -89,5 +89,5 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
                 logging.error(e)
                 return func.HttpResponse("Something is wrong with the payload of the pull_request.", status_code=400)
         
-        return func.HttpResponse("this payload did not include pull_request or issue", status_code=400)
+        return func.HttpResponse("this payload did not include pull_request or issue.", status_code=400)
     return func.HttpResponse("this payload action was not matched.", status_code=400)
