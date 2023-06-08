@@ -37,9 +37,11 @@ jobs:
       - name: execute pytest
         env: 
           APP_ID: ${{ secrets.APP_ID }}
-          PrivateKey: ${{ secrets.PrivateKey }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
           OPEN_AI_URL: ${{ secrets.OPEN_AI_URL }}
+          LINE_BOT_CHANNEL_TOKEN: ${{ secrets.LINE_BOT_CHANNEL_TOKEN }}
+          LINE_BOT_ID: ${{ secrets.LINE_BOT_ID }}
         run:
           pytest
 

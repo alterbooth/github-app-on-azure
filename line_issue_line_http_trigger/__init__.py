@@ -9,8 +9,8 @@ import base64
 lineChannel = LineBotApi(os.environ["LINE_BOT_CHANNEL_TOKEN"])
 
 git_integration = GithubIntegration(
-    os.environ["GITHUB_APP_ID"],
-    base64.b64decode(os.environ["PrivateKey"].encode()).decode()
+    os.environ["APP_ID"],
+    base64.b64decode(os.environ["PRIVATE_KEY"].encode()).decode()
 )
 
 def main(req: func.HttpRequest) -> func.HttpResponse:
