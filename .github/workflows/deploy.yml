@@ -76,7 +76,7 @@ jobs:
         with:
           app-name: 'github-app-functions'
           slot-name: 'production'
-          package: ${{ env.AZURE_GITHUBAPP_PACKAGE_PATH }}
+          package: '.'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
