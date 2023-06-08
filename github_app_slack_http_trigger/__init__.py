@@ -1,12 +1,16 @@
 import json
+import os
 import logging
 import urllib.request
 import azure.functions as func
 from github import Github, GithubIntegration
 import requests
 
-print('Python HTTP trigger function processed a request.')
-app_id = 337955
+logging.info('Python HTTP trigger function processed a request.')
+
+#GithubAppsの環境変数読み込み
+app_id = os.environ.get("APP_ID")
+private_key = os.environ.get("PRIVATE_KEY")
 
 with open("c:/toshi-github-on-azure-private-key.pem") as key:
     private_key = key.read()
