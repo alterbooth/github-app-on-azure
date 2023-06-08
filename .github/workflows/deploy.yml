@@ -11,7 +11,10 @@ on:
   workflow_dispatch:
 
 env:
-  AZURE_FUNCTIONAPP_PACKAGE_PATH: './github_app_http_trigger' # set this to the path to your web app project, defaults to the repository root
+  AZURE_GITHUBAPP_PACKAGE_PATH: './github_app_http_trigger' # set this to the path to your web app project, defaults to the repository root
+  AZURE_LINE_ISSUE_GITHUB_PACKAGE_PATH: './line_issue_github_http_trigger'
+  AZURE_LINE_ISSUE_LINE_PACKAGE_PATH: './line_issue_line_http_trigger'
+  AZURE_GITHUB_SLACK_PACKAGE_PATH: './github_app_slack_timer_trigger'
   PYTHON_VERSION: '3.10' # set this to the python version to use (supports 3.6, 3.7, 3.8)
 
 jobs:
@@ -37,9 +40,11 @@ jobs:
       - name: execute pytest
         env: 
           APP_ID: ${{ secrets.APP_ID }}
-          PrivateKey: ${{ secrets.PrivateKey }}
+          PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
           OPEN_AI_KEY: ${{ secrets.OPEN_AI_KEY }}
           OPEN_AI_URL: ${{ secrets.OPEN_AI_URL }}
+          LINE_BOT_CHANNEL_TOKEN: ${{ secrets.LINE_BOT_CHANNEL_TOKEN }}
+          LINE_BOT_ID: ${{ secrets.LINE_BOT_ID }}
         run:
           pytest
 
@@ -65,13 +70,46 @@ jobs:
           name: python-app
           path: .
 
-      - name: 'Deploy to Azure Functions'
+      - name: 'Deploy to Azure Functions with GitHubApps'
         uses: Azure/functions-action@v1
         id: deploy-to-function
         with:
           app-name: 'github-app-functions'
           slot-name: 'production'
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+          package: '.'
           publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
           scm-do-build-during-deployment: true
           enable-oryx-build: true
+
+      # - name: 'Deploy to Azure Functions with Line GitHub Apps'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function2
+      #   with:
+      #     app-name: 'github-app-functions'
+      #     slot-name: 'production'
+      #     package: ${{ env.AZURE_LINE_ISSUE_GITHUB_PACKAGE_PATH }}
+      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+      #     scm-do-build-during-deployment: true
+      #     enable-oryx-build: true
+
+      # - name: 'Deploy to Azure Functions with Line Line Apps'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function3
+      #   with:
+      #     app-name: 'github-app-functions'
+      #     slot-name: 'production'
+      #     package: ${{ env.AZURE_LINE_ISSUE_LINE_PACKAGE_PATH }}
+      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+      #     scm-do-build-during-deployment: true
+      #     enable-oryx-build: true
+
+      # - name: 'Deploy to Azure Functions with Slack Apps'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function4
+      #   with:
+      #     app-name: 'github-app-functions'
+      #     slot-name: 'production'
+      #     package: ${{ env.AZURE_GITHUB_SLACK_PACKAGE_PATH }}
+      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+      #     scm-do-build-during-deployment: true
+      #     enable-oryx-build: true

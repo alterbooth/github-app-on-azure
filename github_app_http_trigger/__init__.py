@@ -12,7 +12,7 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
     try:
         #GithubAppsの環境変数読み込み
         app_id = os.environ.get("APP_ID")
-        private_key = os.environ.get("PrivateKey")
+        private_key = os.environ.get("PRIVATE_KEY")
         #OpenAIの設定
         openai.api_type = "azure"
         openai.api_base = os.environ.get("OPEN_AI_URL")
@@ -91,3 +91,4 @@ def main(req: func.HttpRequest) -> func.HttpResponse:
         
         return func.HttpResponse("this payload did not include pull_request or issue.", status_code=400)
     return func.HttpResponse("this payload action was not matched.", status_code=400)
+#test
