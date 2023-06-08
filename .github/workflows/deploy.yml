@@ -81,35 +81,35 @@ jobs:
           scm-do-build-during-deployment: true
           enable-oryx-build: true
 
-      - name: 'Deploy to Azure Functions with Line GitHub Apps'
-        uses: Azure/functions-action@v1
-        id: deploy-to-function2
-        with:
-          app-name: 'github-app-functions'
-          slot-name: 'production'
-          package: ${{ env.AZURE_LINE_ISSUE_GITHUB_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+      # - name: 'Deploy to Azure Functions with Line GitHub Apps'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function2
+      #   with:
+      #     app-name: 'github-app-functions'
+      #     slot-name: 'production'
+      #     package: ${{ env.AZURE_LINE_ISSUE_GITHUB_PACKAGE_PATH }}
+      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+      #     scm-do-build-during-deployment: true
+      #     enable-oryx-build: true
 
-      - name: 'Deploy to Azure Functions with Line Line Apps'
-        uses: Azure/functions-action@v1
-        id: deploy-to-function3
-        with:
-          app-name: 'github-app-functions'
-          slot-name: 'production'
-          package: ${{ env.AZURE_LINE_ISSUE_LINE_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+      # - name: 'Deploy to Azure Functions with Line Line Apps'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function3
+      #   with:
+      #     app-name: 'github-app-functions'
+      #     slot-name: 'production'
+      #     package: ${{ env.AZURE_LINE_ISSUE_LINE_PACKAGE_PATH }}
+      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+      #     scm-do-build-during-deployment: true
+      #     enable-oryx-build: true
 
-      - name: 'Deploy to Azure Functions with Slack Apps'
-        uses: Azure/functions-action@v1
-        id: deploy-to-function4
-        with:
-          app-name: 'github-app-functions'
-          slot-name: 'production'
-          package: ${{ env.AZURE_GITHUB_SLACK_PACKAGE_PATH }}
-          publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
-          scm-do-build-during-deployment: true
-          enable-oryx-build: true
+      # - name: 'Deploy to Azure Functions with Slack Apps'
+      #   uses: Azure/functions-action@v1
+      #   id: deploy-to-function4
+      #   with:
+      #     app-name: 'github-app-functions'
+      #     slot-name: 'production'
+      #     package: ${{ env.AZURE_GITHUB_SLACK_PACKAGE_PATH }}
+      #     publish-profile: ${{ secrets.AzureAppService_PublishProfile_1234 }}
+      #     scm-do-build-during-deployment: true
+      #     enable-oryx-build: true
