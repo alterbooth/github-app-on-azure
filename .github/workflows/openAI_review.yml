@@ -12,9 +12,6 @@ jobs:
       contents: read
       pull-requests: write
     steps:
-      #####
-      # セットアップ
-      #####
       - name: Switch to pull request branch
         uses: actions/checkout@v3
         with:
@@ -33,18 +30,9 @@ jobs:
       - name: Install OpenAI
         run: |
           pip install -r requirements.txt
-      #####
-      # 更新されたファイル名一覧を取得
-      #####
       - name: Get diff files
         run: |
-          # ※特定拡張子にフィルタしています
-          git diff --diff-filter=M --name-only HEAD BASE \
-            | grep -e "\.md" -e "\.tf$" -e "\.yaml$" -e "\.py$" > _diff_files.txt
-          cat _diff_files.txt
-      #####
-      # Run ChatGPT
-      #####
+          git diff --name-only HEAD BASE > _diff_files.txt
       - name: run ChatGPT
         shell: bash {0}
         env:
@@ -53,8 +41,8 @@ jobs:
           URL: ${{ github.event.pull_request.html_url }}
         run: |
           # 各ファイルに対して「差分取得 -> 要約 -> PRコメント」を行う
-          cat _diff_files.txt \
-          | while read file_path;do
+          cat _diff_files.txt | while read file_path
+          do
             echo "## summarize updates: ${file_path}"
             # 修正前テキスト, 修正後テキストの取得
             git cat-file -p BASE:${file_path} > _before.txt
