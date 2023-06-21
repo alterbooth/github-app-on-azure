@@ -1,0 +1,72 @@
+name: OpenAI review
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  review-pull-request-by-chatgpt:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      #####
+      # セットアップ
+      #####
+      - name: Switch to pull request branch
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Fetch base branch
+        run: |
+          git fetch origin \
+            ${{ github.event.pull_request.base.sha }}:BASE
+      - name: Setup Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+          architecture: "x64"
+
+      - name: Install OpenAI
+        run: |
+          pip install -r requirements.txt
+      #####
+      # 更新されたファイル名一覧を取得
+      #####
+      - name: Get diff files
+        run: |
+          # ※特定拡張子にフィルタしています
+          git diff --diff-filter=M --name-only HEAD BASE \
+            | grep -e "\.md" -e "\.tf$" -e "\.yaml$" -e "\.py$" > _diff_files.txt
+          cat _diff_files.txt
+      #####
+      # Run ChatGPT
+      #####
+      - name: run ChatGPT
+        shell: bash {0}
+        env:
+          OPENAI_API_KEY: ${{secrets.OPENAI_API_KEY}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          # 各ファイルに対して「差分取得 -> 要約 -> PRコメント」を行う
+          cat _diff_files.txt \
+          | while read file_path;do
+            echo "## summarize updates: ${file_path}"
+            # 修正前テキスト, 修正後テキストの取得
+            git cat-file -p BASE:${file_path} > _before.txt
+            git cat-file -p HEAD:${file_path} > _after.txt
+            # 差分の取得
+            diff _before.txt _after.txt > _diff.txt | true
+            cat _diff.txt
+            # ChatGPTによる要約の取得
+            chatgpt_response=$(python3 summarize_diff.py "${file_path}" "_diff.txt")
+            echo "${chatgpt_response}"
+            # GitHub PR へコメント
+            echo "### :robot: ${file_path} の更新まとめ by ChatGPT
+            ${chatgpt_response}" > _body.txt
+            gh pr comment --body-file _body.txt "${URL}"
+          done
