@@ -1,0 +1,64 @@
+name: OpenAI Code Review
+
+on:
+    pull_request:
+        types: [opened, reopened]
+
+jobs:
+    CodeReviewPullRequest:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pull-requests: write
+        steps:
+          - name: Checkout pull request branch
+            uses: actions/checkout@v3
+            with:
+                ref: ${{ github.event.pull_request.head.sha }}
+
+          - name: Fetch to base branch
+            run: git fetch origin ${{ github.event.pull_request.base.sha }}:BASE
+
+          - name: Setup Python
+            uses: actions/setup-python@v3
+            with:
+                python-version: "3.8"
+                architecture: "x64"
+            
+          - name: Install Python Library
+            run: |
+                pip install --upgrade pip
+                pip install openai
+
+          - name: Get code to review
+            run: |
+                git diff --diff-filter=M --name-only HEAD BASE | grep -f .github/.whitelist | grep -v ".github" > modifiedCode.txt
+                git diff --diff-filter=A --name-only BASE | grep -f .github/.whitelist | grep -v ".github" > addedCode.txt
+
+          - name: Modified code review at ChatGPT
+            shell: bash
+            env:
+                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                API_KEY: ${{ secrets.API_KEY }}
+                ENDPOINT_URL: ${{ secrets.ENDPOINT_URL }}
+                URL: ${{ github.event.pull_request.html_url }}
+            run: |
+                cat modifiedCode.txt | while read file_path ; do
+
+                    git cat-file -p BASE:${file_path} > before.txt
+                    git cat-file -p HEAD:${file_path} > after.txt
+
+                    response=$(python .github/workflows/reviewModified.py "${file_path}" "before.txt" "after.txt")
+                    echo "${response}" > _body.txt
+
+                    gh pr comment --body-file _body.txt "${URL}"
+                done
+                cat addedCode.txt | while read file_path ; do
+
+                    git cat-file -p HEAD:${file_path} > code.txt
+
+                    response=$(python .github/workflows/reviewAdded.py "${file_path}" "code.txt")
+                    echo "${response}" > _body.txt
+
+                    gh pr comment --body-file _body.txt "${URL}"
+                done
