@@ -24,4 +24,4 @@
 ### 注意事項
 
 - `.github/.whitelist`には拡張子以外の文字を入力しないでください。
-- 使用する API は AzureOpenAI を使用してください。
+- 使用する API は`AzureOpenAI`を使用してください。
