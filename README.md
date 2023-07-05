@@ -1,4 +1,5 @@
 ## github-app-on-azure
+
 ### 概要
 このActionsはプルリクエスト内の追加・変更されたファイルに対し、ChatGPTを用いてコードレビューを行います。
 
