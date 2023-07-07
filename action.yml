@@ -19,6 +19,7 @@ runs:
             ref: ${{ github.event.pull_request.head.sha }}
 
       - name: Fetch to base branch
+        shell: bash
         run: git fetch origin ${{ github.event.pull_request.base.sha }}:BASE
 
       - name: Setup Python
@@ -28,6 +29,7 @@ runs:
             architecture: "x64"
         
       - name: Install Python Library
+        shell: bash
         run: |
             pip install --upgrade pip
             pip install openai
@@ -36,9 +38,10 @@ runs:
         shell: bash
         run: |
             mkdir /tmp/pythonscript
-            git clone https://github.com/alterbooth/github-app-on-azure /tmp/pythonscript
+            git clone https://github.com/alterbooth/github-app-on-azure.git /tmp/pythonscript
 
       - name: Get code to review
+        shell: bash
         run: |
             git diff --diff-filter=M --name-only HEAD BASE | grep -f .reviewfiles | grep -v ".github" > modifiedCode.txt
             git diff --diff-filter=A --name-only BASE | grep -f .reviewfiles | grep -v ".github" > addedCode.txt
