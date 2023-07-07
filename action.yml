@@ -35,7 +35,7 @@ runs:
       - name: Clone Python Script
         shell: bash
         run: |
-            mkrid /tmp/pythonscript
+            mkdir /tmp/pythonscript
             git clone https://github.com/alterbooth/github-app-on-azure /tmp/pythonscript
 
       - name: Get code to review
