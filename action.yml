@@ -38,7 +38,7 @@ runs:
         shell: bash
         run: |
             mkdir /tmp/pythonscript
-            git clone https://github.com/alterbooth/github-app-on-azure.git /tmp/pythonscript
+            git clone -b demo-develop https://github.com/alterbooth/github-app-on-azure.git /tmp/pythonscript
 
       - name: Get code to review
         shell: bash
