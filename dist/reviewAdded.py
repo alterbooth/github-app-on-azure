@@ -61,7 +61,7 @@ def main():
         print(response.choices[0]["message"]["content"].strip())
 
     except Exception as e:
-        print(e, ENDPOINT_URL)
+        print(e + "URL: " + ENDPOINT_URL)
 
 if __name__ == "__main__":
     main()
