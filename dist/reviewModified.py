@@ -66,8 +66,8 @@ def main():
 
         print(response.choices[0]["message"]["content"].strip())
 
-    except Exception as e:
-        print(e + "URL: " + ENDPOINT_URL)
+    except Exception:
+        print("エラーが発生しました")
 
 if __name__ == "__main__":
     main()
