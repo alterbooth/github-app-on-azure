@@ -1,4 +1,4 @@
-name: "Code Review Assistant for Azure"
+name: "PullRequest Code Reviewer for Azure"
 description: "Conducts code reviews for PullRequests"
 branding:
     icon: "activity"
