@@ -1,0 +1,16 @@
+name: "PullRequest Code Reviewer for Azure"
+on:
+    pull_request:
+        types: [opened, reopened]
+jobs:
+    PullRequestCodeReview:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            pull-requests: write
+        steps:
+          - name: PullRequest Code Reviewer for Azure
+            uses: alterbooth/pullrequest-code-reviewer-for-azure@v1
+            with:
+                api-key: {{ secrets.API_KEY }}
+                endpoint-url: {{ secrets.ENDPOINT_URL }}
