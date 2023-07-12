@@ -1,4 +1,4 @@
-# Pull Request Reviewer for Azure
+# PullRequest Code Reviewer for Azure
 このActionsはプルリクエスト内の差分ファイルに対し、Azure OpenAI Serviceを用いてコードレビューを行います。
 主に以下の機能を提供します。
 - **変更点の要約** - 差分ファイルの変更箇所がどのように変更されたのかを要約します。
@@ -52,7 +52,7 @@
                     pull-requests: write
                 steps:
                   - name: Code Review with Chat GPT
-                    uses: alterbooth/github-app-on-azure@v1
+                    uses: alterbooth/pullrequest-code-reviewer-for-azure@v1
                     with:
                         api-key: {{ secrets.API_KEY }}
                         endpoint-url: {{ secrets.ENDPOINT_URL }}
