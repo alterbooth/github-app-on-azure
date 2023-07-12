@@ -10,7 +10,7 @@ jobs:
             pull-requests: write
         steps:
           - name: PullRequest Code Reviewer for Azure
-            uses: alterbooth/pullrequest-code-reviewer-for-azure@v1
+            uses: ./
             with:
                 api-key: {{ secrets.API_KEY }}
                 endpoint-url: {{ secrets.ENDPOINT_URL }}
