@@ -9,10 +9,6 @@ jobs:
             contents: read
             pull-requests: write
         steps:
-          - name: Check Files
-            shell: bash
-            run: cat action.yml
-
           - name: PullRequest Code Reviewer for Azure
             uses: ./
             with:
