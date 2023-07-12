@@ -11,8 +11,8 @@ jobs:
         steps:
           - name: Check Files
             shell: bash
-            run: ls -la
-            
+            run: cat action.yml
+
           - name: PullRequest Code Reviewer for Azure
             uses: ./
             with:
