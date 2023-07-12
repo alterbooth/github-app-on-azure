@@ -12,5 +12,5 @@ jobs:
           - name: PullRequest Code Reviewer for Azure
             uses: ./
             with:
-                api-key: {{ secrets.API_KEY }}
-                endpoint-url: {{ secrets.ENDPOINT_URL }}
+                api-key: ${{ secrets.API_KEY }}
+                endpoint-url: ${{ secrets.ENDPOINT_URL }}
