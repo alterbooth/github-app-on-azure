@@ -51,7 +51,7 @@
                     contents: read
                     pull-requests: write
                 steps:
-                  - name: Code Review with Chat GPT
+                  - name: PullRequest Code Reviewer for Azure
                     uses: alterbooth/pullrequest-code-reviewer-for-azure@v1
                     with:
                         api-key: {{ secrets.API_KEY }}
