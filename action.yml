@@ -38,13 +38,13 @@ runs:
         shell: bash
         run: |
             mkdir /tmp/pythonscript
-            git clone -b demo-develop https://github.com/alterbooth/github-app-on-azure.git /tmp/pythonscript
+            git clone https://github.com/alterbooth/github-app-on-azure.git /tmp/pythonscript
 
       - name: Get code to review
         shell: bash
         run: |
-            git diff --diff-filter=M --name-only HEAD BASE | grep -f .reviewfiles | grep -v ".github" > modifiedCode.txt
-            git diff --diff-filter=A --name-only BASE | grep -f .reviewfiles | grep -v ".github" > addedCode.txt
+            git diff --diff-filter=M --name-only HEAD BASE | grep -f .reviewfiles | grep -v -e ".github" -e "dist" > modifiedCode.txt
+            git diff --diff-filter=A --name-only BASE | grep -f .reviewfiles | grep -v -e ".github" -e "dist" > addedCode.txt
 
       - name: Code review with ChatGPT
         shell: bash
