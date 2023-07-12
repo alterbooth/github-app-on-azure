@@ -43,14 +43,14 @@ runs:
       - name: Get code to review
         shell: bash
         run: |
-            git diff --diff-filter=M --name-only HEAD BASE | grep -f .reviewfiles | grep -v ".github" > modifiedCode.txt
-            git diff --diff-filter=A --name-only BASE | grep -f .reviewfiles | grep -v ".github" > addedCode.txt
+            git diff --diff-filter=M --name-only HEAD BASE | grep -f .reviewfiles | grep -v -e ".github" -e "dist" > modifiedCode.txt
+            git diff --diff-filter=A --name-only BASE | grep -f .reviewfiles | grep -v -e ".github" -e "dist" > addedCode.txt
 
       - name: Code review with ChatGPT
         shell: bash
         env:
-            API_KEY: ${{ github.event.inputs.api-key }}
-            ENDPOINT_URL: ${{ github.event.inputs.endpoint-url }}
+            API_KEY: ${{ inputs.api-key }}
+            ENDPOINT_URL: ${{ inputs.endpoint-url }}
             GH_TOKEN: ${{ github.token }}
             URL: ${{ github.event.pull_request.html_url }}
         run: |

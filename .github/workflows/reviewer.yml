@@ -9,8 +9,13 @@ jobs:
             contents: read
             pull-requests: write
         steps:
-          - name: PullRequest Code Reviewer for Azure
-            uses: alterbooth/pullrequest-code-reviewer-for-azure@v1
+          - name: Checkout to pull request branch
+            uses: actions/checkout@v3
             with:
-                api-key: {{ secrets.API_KEY }}
-                endpoint-url: {{ secrets.ENDPOINT_URL }}
+                ref: ${{ github.event.pull_request.head.sha }}
+
+          - name: PullRequest Code Reviewer for Azure
+            uses: ./
+            with:
+                api-key: ${{ secrets.API_KEY }}
+                endpoint-url: ${{ secrets.ENDPOINT_URL }}
